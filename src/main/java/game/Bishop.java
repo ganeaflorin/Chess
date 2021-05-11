@@ -21,6 +21,11 @@ public class Bishop extends Piece {
     }
 
     @Override
+    public Bishop getNewPieceOfType() {
+        return new Bishop(isWhite);
+    }
+
+    @Override
     public String toString() {
         return "Bishop";
     }

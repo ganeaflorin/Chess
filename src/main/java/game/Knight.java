@@ -27,6 +27,11 @@ public class Knight extends Piece {
     }
 
     @Override
+    public Knight getNewPieceOfType() {
+        return new Knight(isWhite);
+    }
+
+    @Override
     public String toString() {
         return "Knight";
     }

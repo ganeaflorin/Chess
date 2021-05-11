@@ -80,6 +80,8 @@ public class MainFrame {
                         if (whiteTurn == firstSquare.getPiece().isWhite()) {
                             if (move.makeMove(firstSquare.getX(), firstSquare.getY(), secondSquare.getX(), secondSquare.getY()))
                                 changeTurn();
+//                            move.isCheck();
+                            move.isCheckMate();
                         }
                         checkedSquare = move.getCheckedSquare();
                         updateBoardImages();

@@ -20,6 +20,11 @@ public class Rook extends Piece {
     }
 
     @Override
+    public Rook getNewPieceOfType() {
+        return new Rook(isWhite);
+    }
+
+    @Override
     public String toString() {
         return "Rook";
     }

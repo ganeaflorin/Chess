@@ -8,7 +8,6 @@ public class Pawn extends Piece {
         super(isWhite);
     }
 
-
     public boolean isValidMove(int startLineIndex, int startColumnIndex, int endLineIndex, int endColumnIndex, boolean isAttacking) {
         if (isAttacking) {
             if (isWhite && (startColumnIndex == endColumnIndex - 1 || startColumnIndex == endColumnIndex + 1) && startLineIndex == endLineIndex + 1) {
@@ -26,9 +25,7 @@ public class Pawn extends Piece {
             return true;
         }
         return false;
-
     }
-
 
     public String getPath() {
         if (isWhite)
@@ -39,5 +36,10 @@ public class Pawn extends Piece {
     @Override
     public String toString() {
         return "Pawn";
+    }
+
+    @Override
+    public Pawn getNewPieceOfType() {
+        return new Pawn(isWhite);
     }
 }

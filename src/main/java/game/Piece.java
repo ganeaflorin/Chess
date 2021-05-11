@@ -25,4 +25,7 @@ public abstract class Piece {
     public void setWasMoved(boolean wasMoved) {
         this.wasMoved = wasMoved;
     }
+
+    public abstract Piece getNewPieceOfType();
 }
+

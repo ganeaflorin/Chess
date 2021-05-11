@@ -21,6 +21,11 @@ public class Queen extends Piece {
     }
 
     @Override
+    public Queen getNewPieceOfType() {
+        return new Queen(isWhite);
+    }
+
+    @Override
     public String toString() {
         return "Queen";
     }

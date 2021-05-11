@@ -29,7 +29,6 @@ public class SquarePanel extends JPanel {
         setColor();
     }
 
-
     public void setImage(Board board) {
         this.removeAll();
         try {

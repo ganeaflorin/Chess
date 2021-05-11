@@ -27,6 +27,11 @@ public class King extends Piece {
     }
 
     @Override
+    public King getNewPieceOfType() {
+        return new King(isWhite);
+    }
+
+    @Override
     public String toString() {
         return "King";
     }
