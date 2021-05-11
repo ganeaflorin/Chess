@@ -14,10 +14,6 @@ public abstract class Piece {
         return isWhite;
     }
 
-    public void setWhite(boolean white) {
-        isWhite = white;
-    }
-
     public abstract boolean isValidMove(int startLineIndex, int startColumnIndex, int endLineIndex, int endColumnIndex, boolean isAttacking);
 
     public abstract String getPath();

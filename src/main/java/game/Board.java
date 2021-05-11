@@ -1,7 +1,7 @@
 package game;
 
 public class Board {
-    private Square[][] board = new Square[8][8];
+    private final Square[][] board = new Square[8][8];
 
     public Board() {
         for (int lineIndex = 0; lineIndex < 8; lineIndex++)

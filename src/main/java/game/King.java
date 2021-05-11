@@ -5,9 +5,6 @@ public class King extends Piece {
         super(isWhite);
     }
 
-    private final String whitePath = "C:/Users/andre/IdeaProjects/chess/images/whiteking.png";
-    private final String blackPath = "C:/Users/andre/IdeaProjects/chess/images/blackking.png";
-
     public boolean isValidMove(int startLineIndex, int startColumnIndex, int endLineIndex, int endColumnIndex, boolean isAttacking) {
         return endLineIndex == startLineIndex && endColumnIndex == startColumnIndex - 1 ||
                 endLineIndex == startLineIndex - 1 && endColumnIndex == startColumnIndex - 1 ||
@@ -21,8 +18,10 @@ public class King extends Piece {
 
     @Override
     public String getPath() {
+        String whitePath = "C:/Users/andre/IdeaProjects/chess/images/whiteking.png";
         if (isWhite)
             return whitePath;
+        String blackPath = "C:/Users/andre/IdeaProjects/chess/images/blackking.png";
         return blackPath;
     }
 

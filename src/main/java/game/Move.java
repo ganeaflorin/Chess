@@ -29,9 +29,7 @@ public class Move {
         if (!startSquare.getPiece().isValidMove(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex, isAttacking))
             return false;
         //daca putem ajunge pe patratul respectiv (nu e alta piesa in drum)
-        if (!isReachable(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex))
-            return false;
-        return true;
+        return isReachable(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
     }
 
     //    private boolean simulateMoveForCheck(int startLineIndex, int startColumnIndex, int endLineIndex, int endColumnIndex) {
@@ -210,18 +208,13 @@ public class Move {
     public boolean isReachable(int startLineIndex, int startColumnIndex, int endLineIndex, int endColumnIndex) {
         Square startSquare = board[startLineIndex][startColumnIndex];
 
-        switch (startSquare.getPiece().toString()) {
-            case "Rook":
-                return isReachableRook(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
-            case "Queen":
-                return isReachableQueen(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
-            case "Bishop":
-                return isReachableBishop(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
-            case "Pawn":
-                return isReachablePawn(startLineIndex, startColumnIndex, endLineIndex);
-            default:
-                return true;
-        }
+        return switch (startSquare.getPiece().toString()) {
+            case "Rook" -> isReachableRook(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
+            case "Queen" -> isReachableQueen(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
+            case "Bishop" -> isReachableBishop(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
+            case "Pawn" -> isReachablePawn(startLineIndex, startColumnIndex, endLineIndex);
+            default -> true;
+        };
     }
 
     private boolean isReachablePawn(int startLineIndex, int starColumnIndex, int endLineIndex) {

@@ -16,9 +16,9 @@ import static javax.swing.SwingUtilities.isRightMouseButton;
 
 public class MainFrame {
     private final JFrame game;
-    private BoardPanel panel;
+    private final BoardPanel panel;
     private final Dimension dimension = new Dimension(800, 800);
-    private Board board;
+    private final Board board;
     private Move move;
     private Square firstSquare;
     private Square secondSquare;
@@ -128,7 +128,7 @@ public class MainFrame {
     }
 
     public void changeTurn() {
-        whiteTurn = (whiteTurn == true) ? false : true;
+        whiteTurn = !whiteTurn;
     }
 }
 

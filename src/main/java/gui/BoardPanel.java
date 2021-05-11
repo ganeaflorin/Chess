@@ -1,7 +1,5 @@
 package gui;
 
-import game.Board;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -23,9 +21,9 @@ public class BoardPanel extends JPanel {
 
     }
 
-    public SquarePanel getSquarePanel(int index) {
-        return boardPanels.get(index);
-    }
+//    public SquarePanel getSquarePanel(int index) {
+//        return boardPanels.get(index);
+//    }
 
     public List<SquarePanel> getBoardPanels() {
         return boardPanels;

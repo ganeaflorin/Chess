@@ -3,8 +3,8 @@ package game;
 public class Square {
     private Piece piece;
     private boolean isEmpty = true;
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     public Square(int x, int y, Piece piece) {
         this.piece = piece;
@@ -39,9 +39,5 @@ public class Square {
         return y;
     }
 
-    public void setCoordonates(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
 
 }
