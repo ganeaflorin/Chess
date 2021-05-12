@@ -21,10 +21,6 @@ public class BoardPanel extends JPanel {
 
     }
 
-//    public SquarePanel getSquarePanel(int index) {
-//        return boardPanels.get(index);
-//    }
-
     public List<SquarePanel> getBoardPanels() {
         return boardPanels;
     }

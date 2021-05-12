@@ -83,7 +83,8 @@ public class MainFrame {
 //                            move.isCheck();
                             move.isCheckMate();
                         }
-                        checkedSquare = move.getCheckedSquare();
+                        if (move.isCheck())
+                            checkedSquare = move.getCheckedSquare();
                         updateBoardImages();
                         firstSquare = null;
                         secondSquare = null;

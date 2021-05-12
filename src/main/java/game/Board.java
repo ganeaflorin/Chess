@@ -18,7 +18,6 @@ public class Board {
                 if (lineIndex == 0) setFirstRankPieces(lineIndex, columnIndex, isWhite);
                 if (lineIndex == 1)
                     board[lineIndex][columnIndex].setPiece(new Pawn(isWhite));
-
             }
 
     }
@@ -30,7 +29,6 @@ public class Board {
                 if (lineIndex == 7) setFirstRankPieces(lineIndex, columnIndex, isWhite);
                 if (lineIndex == 6)
                     board[lineIndex][columnIndex].setPiece(new Pawn(isWhite));
-
             }
     }
 
@@ -48,7 +46,6 @@ public class Board {
             square.setPiece(new King(isWhite));
     }
 
-
     public void printBoard() {
         for (int lineIndex = 0; lineIndex < 8; lineIndex++) {
             for (int columnIndex = 0; columnIndex < 8; columnIndex++)
@@ -58,7 +55,6 @@ public class Board {
             System.out.println();
         }
     }
-
 
     public Square[][] getBoard() {
         return board;

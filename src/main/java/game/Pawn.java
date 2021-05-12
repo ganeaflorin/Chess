@@ -13,7 +13,6 @@ public class Pawn extends Piece {
             }
             return !isWhite && (startColumnIndex == endColumnIndex - 1 || startColumnIndex == endColumnIndex + 1) && startLineIndex == endLineIndex - 1;
         }
-        //daca nu ataca
         if (isWhite && startColumnIndex == endColumnIndex && (startLineIndex == endLineIndex + 1 || (!wasMoved && startLineIndex == endLineIndex + 2))) {
             return true;
         }

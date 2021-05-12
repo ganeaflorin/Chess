@@ -12,42 +12,23 @@ public class Move {
         this.board = board.getBoard();
     }
 
-    //true daca mutarea e valida
-    //false daca nu
     public boolean validateMove(int startLineIndex, int startColumnIndex, int endLineIndex, int endColumnIndex) {
         Square startSquare = board[startLineIndex][startColumnIndex];
         Square endSquare = board[endLineIndex][endColumnIndex];
         boolean isAttacking = false;
         if (!endSquare.isEmpty())
             isAttacking = true;
-        //daca e gol nu putem muta
         if (startSquare.isEmpty()) return false;
-        //daca vrem sa mutam peste o piesa proprie
-        if (!endSquare.isEmpty() && startSquare.getPiece().isWhite() == endSquare.getPiece().isWhite()) return false;
-        //daca nu e empty
-        //verificam daca mutarea e valida
+        if (startSquare.getPiece().toString().equals("King") && ((endColumnIndex == startColumnIndex - 4 || endColumnIndex == startColumnIndex + 3))) {
+            //do nothing
+
+        } else if (!endSquare.isEmpty() && startSquare.getPiece().isWhite() == endSquare.getPiece().isWhite())
+            return false;
         if (!startSquare.getPiece().isValidMove(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex, isAttacking))
             return false;
-        //daca putem ajunge pe patratul respectiv (nu e alta piesa in drum)
         return isReachable(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
     }
 
-    //    private boolean simulateMoveForCheck(int startLineIndex, int startColumnIndex, int endLineIndex, int endColumnIndex) {
-//        Square startSquare = board[startLineIndex][startColumnIndex];
-//        Square endSquare = board[endLineIndex][endColumnIndex];
-//        Square auxEndSquare = null;
-//        if (!endSquare.isEmpty())
-//            auxEndSquare = new Square(endSquare.getX(), endSquare.getY(), endSquare.getPiece().getNewPieceOfType());
-//        endSquare.setPiece(startSquare.getPiece());
-//        startSquare.setEmpty();
-//        boolean isChecked = (getCheckedSquare() != null);
-//        startSquare.setPiece(endSquare.getPiece());
-//        if (auxEndSquare.isEmpty())
-//            endSquare.setEmpty();
-//        else
-//            endSquare.setPiece(auxEndSquare.getPiece());
-//        return isChecked;
-//    }
     private void makeTempMove(Square start, Square end) {
         end.setPiece(start.getPiece());
         start.setEmpty();
@@ -84,11 +65,12 @@ public class Move {
         boolean isCheck = false;
         for (int lineIndex = 0; lineIndex < 8; lineIndex++)
             for (int columnIndex = 0; columnIndex < 8; columnIndex++) {
-                if (!board[lineIndex][columnIndex].isEmpty() &&
-                        board[lineIndex][columnIndex].getPiece().toString().equals("King")) {
+                Square currentSquare = board[lineIndex][columnIndex];
+                if (!currentSquare.isEmpty() &&
+                        currentSquare.getPiece().toString().equals("King")) {
                     if (firstKingSq == null)
-                        firstKingSq = board[lineIndex][columnIndex];
-                    if (firstKingSq != null) secondKingSq = board[lineIndex][columnIndex];
+                        firstKingSq = currentSquare;
+                    if (firstKingSq != null) secondKingSq = currentSquare;
                 }
             }
         for (int lineIndex = 0; lineIndex < 8; lineIndex++)
@@ -140,16 +122,6 @@ public class Move {
         return isCheck() && countAvailableMoves == 0;
     }
 
-//    public boolean isStalemate(int turn) {
-//        int countPieces = 0;
-//        for (int lineIndex = 0; lineIndex < 8; lineIndex++)
-//            for (int columnIndex = 0; columnIndex < 8; columnIndex++)
-//                if (!board[lineIndex][columnIndex].isEmpty())
-//                    countPieces++;
-//        if () //
-//            return countPieces == 2 || (!isCheck() &&);
-//    }
-
     public List<Square> availableMoves(Square square) {
         List<Square> availableSquares = new ArrayList<>();
         boolean isWhite = square.getPiece().isWhite();
@@ -176,45 +148,111 @@ public class Move {
         return availableSquares;
     }
 
+    public void castle(int startLineIndex, int startColumnIndex, int endLineIndex, int endColumnIndex) {
+        Square startSquare = board[startLineIndex][startColumnIndex];
+        Square endSquare = board[endLineIndex][endColumnIndex];
+        if ((endColumnIndex == startColumnIndex - 4)) {
+            board[endLineIndex][endColumnIndex + 2].setPiece(startSquare.getPiece());
+            board[endLineIndex][endColumnIndex + 3].setPiece(endSquare.getPiece());
+            startSquare.setEmpty();
+            endSquare.setEmpty();
+        } else if (endColumnIndex == startColumnIndex + 3) {
+            board[endLineIndex][endColumnIndex - 1].setPiece(startSquare.getPiece());
+            board[endLineIndex][endColumnIndex - 2].setPiece(endSquare.getPiece());
+            startSquare.setEmpty();
+            endSquare.setEmpty();
+        }
+    }
+
     public boolean makeMove(int startLineIndex, int startColumnIndex, int endLineIndex, int endColumnIndex) {
         Square startSquare = board[startLineIndex][startColumnIndex];
         Square endSquare = board[endLineIndex][endColumnIndex];
-//        Square auxEndSquare = null;
-//        if (!endSquare.isEmpty())
-//            auxEndSquare = new Square(endSquare.getX(), endSquare.getY(), endSquare.getPiece().getNewPieceOfType());
-//        Square checkedSquare;
-//        if (validateMove(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex)) {
         if (availableMoves(startSquare).contains(endSquare)) {
-            endSquare.setPiece(startSquare.getPiece());
+            if (startSquare.getPiece().toString().equals("King") && (endColumnIndex == startColumnIndex - 4 || endColumnIndex == startColumnIndex + 3)) {
+                castle(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
+                return true;
+            } else {
+                if (!pawnPromotion(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex)) {
+                    endSquare.setPiece(startSquare.getPiece());
+                    startSquare.setEmpty();
+                    endSquare.getPiece().setWasMoved(true);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //TODO: BUG: DACA EU SUNT ALB SI TREBUIE SA MUT, DACA DAU CLICK PE O PIESA NEAGRA TREBUIE DUPA SA DAU 2 CLICKURI CA SA MUT
+    //TODO: STALEMATE
+    public boolean pawnPromotion(int startLineIndex, int startColumnIndex, int endLineIndex, int endColumnIndex) {
+        Square startSquare = board[startLineIndex][startColumnIndex];
+        Square endSquare = board[endLineIndex][endColumnIndex];
+        if ((endLineIndex == 0 || endLineIndex == 7) && startSquare.getPiece().toString().equals("Pawn")) {
+            endSquare.setPiece(new Queen(startSquare.getPiece().isWhite()));
             startSquare.setEmpty();
-//            if ((checkedSquare = getCheckedSquare()) != null && checkedSquare.getPiece().isWhite() == endSquare.getPiece().isWhite()) {
-//                startSquare.setPiece(endSquare.getPiece());
-//                if (auxEndSquare == null)
-//                    endSquare.setEmpty();
-//                else
-//                    endSquare.setPiece(auxEndSquare.getPiece());
-//                return false;
-//            }
-            endSquare.getPiece().setWasMoved(true);
             return true;
         }
         return false;
     }
-    //TODO: BUG: DACA EU SUNT ALB SI TREBUIE SA MUT, DACA DAU CLICK PE O PIESA NEAGRA TREBUIE DUPA SA DAU 2 CLICKURI CA SA MUT
-    //TODO: STALEMATE
-    //TODO: PAWN PROMOTION
-    //TODO: CASTLE
 
     public boolean isReachable(int startLineIndex, int startColumnIndex, int endLineIndex, int endColumnIndex) {
         Square startSquare = board[startLineIndex][startColumnIndex];
-
         return switch (startSquare.getPiece().toString()) {
             case "Rook" -> isReachableRook(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
             case "Queen" -> isReachableQueen(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
             case "Bishop" -> isReachableBishop(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
             case "Pawn" -> isReachablePawn(startLineIndex, startColumnIndex, endLineIndex);
+            case "King" -> isReachableKing(startLineIndex, startColumnIndex, endLineIndex, endColumnIndex);
             default -> true;
         };
+    }
+
+    private boolean isReachableKing(int startLineIndex, int startColumnIndex, int endLineIndex, int endColumnIndex) {
+        Square endSquare = board[endLineIndex][endColumnIndex];
+        Square startSquare = board[startLineIndex][startColumnIndex];
+        if (endLineIndex == startLineIndex) {
+            if (endColumnIndex == startColumnIndex - 4) {
+                if (endSquare.isEmpty() || !endSquare.getPiece().toString().equals("Rook") || endSquare.getPiece().isWasMoved())
+                    return false;
+                else {
+                    for (int columnIndex = endColumnIndex + 1; columnIndex < startColumnIndex; columnIndex++) {
+                        Square candidateSquare = board[startLineIndex][columnIndex];
+                        if (!candidateSquare.isEmpty()) return false;
+                        if (candidateSquare.isEmpty()) {
+                            candidateSquare.setPiece(startSquare.getPiece());
+                            startSquare.setEmpty();
+                            boolean isChecked = isCheck();
+                            startSquare.setPiece(candidateSquare.getPiece());
+                            candidateSquare.setEmpty();
+                            if (!isChecked) return false;
+                        }
+                    }
+                }
+            }
+
+            if (endColumnIndex == startColumnIndex + 3) {
+                if (endSquare.isEmpty() || !endSquare.getPiece().toString().equals("Rook") || endSquare.getPiece().isWasMoved())
+                    return false;
+                else {
+                    for (int columnIndex = startColumnIndex + 1; columnIndex < endColumnIndex; columnIndex++) {
+                        Square candidateSquare = board[startLineIndex][columnIndex];
+                        if (!candidateSquare.isEmpty()) return false;
+                        else {
+                            candidateSquare.setPiece(startSquare.getPiece());
+                            startSquare.setEmpty();
+                            boolean isChecked = isCheck();
+                            startSquare.setPiece(candidateSquare.getPiece());
+                            candidateSquare.setEmpty();
+                            if (!isChecked) return false;
+
+                        }
+                    }
+                }
+            }
+
+        }
+        return true;
     }
 
     private boolean isReachablePawn(int startLineIndex, int starColumnIndex, int endLineIndex) {
@@ -273,7 +311,6 @@ public class Move {
                 for (int columnIndex = startColumnIndex - 1; columnIndex > endColumnIndex; columnIndex--)
                     if (!board[startLineIndex][columnIndex].isEmpty())
                         return false;
-
         }
         if (startColumnIndex == endColumnIndex) {
             if (startLineIndex > endLineIndex) {
@@ -285,9 +322,7 @@ public class Move {
                     if (!board[lineIndex][startColumnIndex].isEmpty())
                         return false;
             }
-
         }
-
         return true;
     }
 
