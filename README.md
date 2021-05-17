@@ -12,6 +12,7 @@ scorul, culoarea care trebuie sa mute si piesele capturate de fiecare jucator:
 ![interfata principala joc](https://i.imgur.com/3tlHEtD.png)
 
 Atunci cand un jucatorul apasa pe o piesa, mutarile valide ale acesteia sunt calculate si colorate cu albastru (daca un rege este in sah, patratul respectiv este colorat cu rosu):
+
 (in cazul acesta, nebunul de culoare neagra este apasat si acesta poate muta doar pe o diagonala, intrucat daca ar muta pe cealalta regele sau ar ramane in sah 
 din cauza nebunului de culoare alba). 
 
